@@ -10,3 +10,4 @@ proprietary_codecs=true
 symbol_level=0
 use_gnome_keyring=false
 use_sysroot=false
+enable_webui_certificate_viewer=false
