@@ -1,15 +1,25 @@
 --- a/chrome/browser/ui/views/certificate_viewer_mac_views.mm
 +++ b/chrome/browser/ui/views/certificate_viewer_mac_views.mm
-@@ -8,9 +8,9 @@
- #include "components/remote_cocoa/browser/window.h"
- #include "components/remote_cocoa/common/native_widget_ns_window.mojom.h"
+@@ -26,3 +26,22 @@
  
--void ShowCertificateViewerForClientAuth(content::WebContents* web_contents,
--                                        gfx::NativeWindow parent,
--                                        net::X509Certificate* cert) {
+   mojo_window->ShowCertificateViewer(cert);
+ }
++
 +void ShowCertificateViewer(content::WebContents* web_contents,
 +                           gfx::NativeWindow parent,
 +                           net::X509Certificate* cert) {
-   // The certificate viewer on macOS uses the OS viewer rather than the Views
-   // implementation (see https://crbug.com/953425), so go through a Mojo
-   // interface. This calls the platform APIs from the right process in PWAs.
++  // The certificate viewer on macOS uses the OS viewer rather than the Views
++  // implementation (see https://crbug.com/953425), so go through a Mojo
++  // interface. This calls the platform APIs from the right process in PWAs.
++  // See https://crbug.com/916815. If this dialog is switched to Views, the Mojo
++  // call will no longer be needed.
++  remote_cocoa::mojom::NativeWidgetNSWindow* mojo_window =
++      remote_cocoa::GetWindowMojoInterface(parent);
++  if (!mojo_window) {
++    // Every WebContents window should have a Mojo interface.
++    LOG(ERROR) << "Could not get window Mojo interface";
++    return;
++  }
++
++  mojo_window->ShowCertificateViewer(cert);
++}
