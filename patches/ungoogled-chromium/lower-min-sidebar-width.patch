@@ -1,0 +1,11 @@
+--- a/chrome/browser/ui/views/side_panel/side_panel.cc
++++ b/chrome/browser/ui/views/side_panel/side_panel.cc
+@@ -232,7 +232,7 @@
+ }
+ 
+ gfx::Size SidePanel::GetMinimumSize() const {
+-  const int min_side_panel_contents_width = 320;
++  const int min_side_panel_contents_width = 10;
+   const int min_height = 0;
+   return gfx::Size(min_side_panel_contents_width + kBorderInsets.width(),
+                    min_height);
